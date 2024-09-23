@@ -49,7 +49,7 @@ const getCode = async (req, res) => {
     } else {
       // If the code does not exist, return a 'code not found' message
       return res.status(404).json({
-        message: "This Code Not Exist or inCorrect",
+        message: "هذا الكود خطا او غير موجود",
       });
     }
   } catch (error) {
@@ -60,7 +60,5 @@ const getCode = async (req, res) => {
     });
   }
 };
-
-
 
 export { code, getCode };
