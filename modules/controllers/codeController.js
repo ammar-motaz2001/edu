@@ -18,7 +18,7 @@ export const signUp = async (req, res) => {
   // Validate the request body
   if (!email || !fullName || !grade) {
     return res.status(400).json({
-      message: "الرجاء توفير جميع الحقول المطلوبة: البريد الإلكتروني، الاسم الكامل، الدرجة",
+      message: "الرجاء توفير جميع الحقول المطلوبة: البريد الإلكتروني، الاسم الكامل، الصف",
     });
   }
 
