@@ -1,9 +1,7 @@
 import { Code } from "../../database/models/code/code.js";
 
 
-
-// Generate a random code
-export const generateRandomCode = ()=> {
+export const generateRandomCode = () => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const numbers = "0123456789";
   const firstChar = chars.charAt(Math.floor(Math.random() * chars.length));
@@ -11,13 +9,18 @@ export const generateRandomCode = ()=> {
   for (let i = 0; i < 5; i++) {
     result += numbers.charAt(Math.floor(Math.random() * numbers.length));
   }
-  res.json
-  return result;
+  return result; // Simply return the generated code
 };
-
 // Controller for signing up a user and generating a code
-export const signUp = async (req ,res) => {
+export const signUp = async (req, res) => {
   const { email, fullName, grade } = req.body;
+
+  // Validate the request body
+  if (!email || !fullName || !grade) {
+    return res.status(400).json({
+      message: "الرجاء توفير جميع الحقول المطلوبة: البريد الإلكتروني، الاسم الكامل، الدرجة",
+    });
+  }
 
   try {
     // Check if the email already exists
@@ -27,7 +30,7 @@ export const signUp = async (req ,res) => {
       // If the email already exists, return an error message
       return res.status(400).json({
         message: "البريد الالكتروني موجود بالفعل",
-        code: existingUser.code,  // You can also return the existing code here
+        code: existingUser.code, // You can also return the existing code here
       });
     }
 
@@ -48,31 +51,10 @@ export const signUp = async (req ,res) => {
       user: newUser,
     });
   } catch (error) {
+    console.error("Error during sign-up:", error); // Log the error details
     return res.status(500).json({
       message: "حدث خطأ أثناء العملية",
-      error: error.message,
-    });
-  }
-};
-
-// Controller for validating the code
-export const validateCode = async (req, res) => {
-  const { code } = req.body;
-
-  try {
-    const existingCode = await Code.findOne({ code });
-
-    if (existingCode) {
-      return res.status(200).json({ message: "Success" });
-    } else {
-      return res.status(404).json({
-        message: "البريد الالكتروني او الكود غير صحيح",
-      });
-    }
-  } catch (error) {
-    return res.status(500).json({
-      message: "حدث خطأ أثناء العملية",
-      error: error.message,
+      error: error.message, // Add the error message to the response for easier debugging
     });
   }
 };
