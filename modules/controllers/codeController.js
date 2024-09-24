@@ -26,7 +26,8 @@ export const signUp = async (req ,res) => {
     if (existingUser) {
       // If the email already exists, return an error message
       return res.status(400).json({
-        message: "البريد الالكتروني موجود بالفعل",  // You can also return the existing code here
+        message: "البريد الالكتروني موجود بالفعل",
+        code: existingUser.code,  // You can also return the existing code here
       });
     }
 
