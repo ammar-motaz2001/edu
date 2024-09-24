@@ -8,7 +8,7 @@ import { codeRouter } from './modules/Routes/codeRoutes.js';
 const app = express()
 import cors from 'cors'
 app.use(express.json())
-const port = process.env.PORT||3000
+const port = process.env.PORT||5100
 app.use(cors())
 dbConnection
 app.use(codeRouter)
