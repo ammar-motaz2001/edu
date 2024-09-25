@@ -30,7 +30,7 @@ export const signUp = async (req, res) => {
       // If the email already exists, return an error message
       return res.status(400).json({
         message: "البريد الالكتروني موجود بالفعل",
-        code: existingUser.code, // You can also return the existing code here
+        code: existingUser.code, // Return the existing code here
       });
     }
 
@@ -51,10 +51,49 @@ export const signUp = async (req, res) => {
       user: newUser,
     });
   } catch (error) {
-    console.error("Error during sign-up:", error); // Log the error details
+    console.error("Error during sign-up:", error);
     return res.status(500).json({
       message: "حدث خطأ أثناء العملية",
-      error: error.message, // Add the error message to the response for easier debugging
+      error: error.message,
+    });
+  }
+};
+
+export const signInWithCode = async (req, res) => {
+  const { code } = req.body;
+
+  // Validate the request body
+  if (!code) {
+    return res.status(400).json({
+      message: "الرجاء توفير الكود",
+    });
+  }
+
+  try {
+    // Check if the code exists in the database
+    const user = await Code.findOne({ code });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "الكود غير صحيح",
+      });
+    }
+
+    // Successful login
+    return res.status(200).json({
+      message: "تم تسجيل الدخول بنجاح",
+      user: {
+        email: user.email,
+        fullName: user.fullName,
+        grade: user.grade,
+        code: user.code,
+      },
+    });
+  } catch (error) {
+    console.error("Error during sign-in with code:", error);
+    return res.status(500).json({
+      message: "حدث خطأ أثناء العملية",
+      error: error.message,
     });
   }
 };
